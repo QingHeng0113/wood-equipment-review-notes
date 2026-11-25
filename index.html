@@ -920,7 +920,13 @@ function norm(s){
 }
 function checkFill(q, val){
   const v = norm(val);
-  return !!v && q.a.some(a => norm(a) === v);
+  if(!v) return false;
+  return q.a.some(a => {
+    if(norm(a) === v) return true;
+    const items = s => String(s).split(/[、,，;；]/).map(x => norm(x)).filter(Boolean).sort().join("|");
+    const ia = items(a), iv = items(val);
+    return !!ia && ia === iv;
+  });
 }
 function isObjective(t){ return ["single","multi","tf","fill"].includes(t); }
 function sameArr(a,b){
