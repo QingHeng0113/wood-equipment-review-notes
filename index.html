@@ -1074,6 +1074,14 @@ function showTab(name){
   currentTab = name;
   $$(".tab").forEach(b => b.classList.toggle("active", b.dataset.tab === name));
   $$(".page").forEach(p => p.classList.toggle("active", p.id === "page-" + name));
+  const activeTab = $('.tab[data-tab="' + name + '"]');
+  const tabsBar = $("#tabs");
+  if(activeTab && tabsBar){
+    const tr = activeTab.getBoundingClientRect(), cr = tabsBar.getBoundingClientRect();
+    if(tr.left < cr.left + 8 || tr.right > cr.right - 8){
+      tabsBar.scrollBy({left: tr.left - cr.left - 12, behavior:"smooth"});
+    }
+  }
   if(name === "quiz"){ updateStats(); if(!quiz.list.length) rebuildQuiz(); }
   if(name === "exam") renderExamHome();
   window.scrollTo({top:0, behavior:"smooth"});
